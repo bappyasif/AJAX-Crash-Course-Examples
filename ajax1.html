@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AJAX 1 - Text File</title>
+</head>
+<body>
+    <button id="button">Get Text From File</button>
+
+    <br><br>
+    <div id="text"></div>
+
+    <script>
+        // Event Listener
+        document.getElementById("button").addEventListener("click", loadText);
+
+        function loadText() {
+            //console.log("button Clicked");
+            // Create an XHR Object
+            var xhr = new XMLHttpRequest();
+            // Open Connection : type, url/file, async
+            //console.log(xhr);
+            //xhr.open("GET", "sample.txt", true);
+            xhr.open("GET", "sample2.txt", true);
+
+            console.log("READYSTATE : ", xhr.readyState);
+
+            // OPTIONAL : Typically Used For Loaders
+            xhr.onprogress = function() {
+                console.log("READYSTATE : ", xhr.readyState);
+            }
+
+            // Onload Method
+            xhr.onload = function() {
+                console.log("READYSTATE : ", xhr.readyState);
+                if(this.status == 200) {
+                    console.log(this.responseText);
+                    document.getElementById("text").innerHTML = this.responseText;
+                } else if(this.status = 404) {
+                    document.getElementById("text").innerHTML = "No Texts Are Found";
+                }
+            }
+
+            // Old Way Of Onload
+            // xhr.onreadystatechange = function() {
+            //     console.log("READYSTATE : ", xhr.readyState);
+            //     if(this.readyState == 4 && this.status == 200) {
+            //         //console.log(this.responseText); 
+            //     }
+            // }
+
+            // onError Method
+            xhr.onerror = function() {
+                console.log("Request Error");
+            }
+
+            // Send Request
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
