@@ -2,7 +2,7 @@
 
 
 // Connect TO A Database
-$db_conn = mysqli_connect("localhost", "root", "", "learning_ajax");
+$db_conn = mysqli_connect("127.0.0.1", "root", "", "learningajax");
 
 echo "Processing \n";
 
@@ -15,7 +15,7 @@ if(isset($_POST['name'])){
     $query = "INSERT INTO users(name) VALUES('$name')";
 
     if(mysqli_query($db_conn, $query)) {
-        echo "Users Added...\n";
+        echo "\n Users Added...\n";
     } else {
         echo "ERROR : ".mysqli_error($db_conn);
     }
