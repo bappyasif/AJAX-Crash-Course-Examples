@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css">
     <style media="screen">
       #fb-btn{margin-top: 20px;}
-      #profile{display: none;}
+      #profile, #logout{display: none;}
     </style>
 </head>
 <body>
@@ -38,14 +38,60 @@
      function statusChangeCallback(response){
        if(response.status === "connected") {
          console.log("Login Authenticated");
+         setElements(true);
+         testAPI();
        } else {
          console.log("Not Authenticated");
+         setElements(false);
        }
+     }
+
+     function testAPI() { 
+       FB.api("/me?fields=name,email,birthday,gender", function(response) {
+         if(response && !response.error) {
+           //console.log(response);
+           buildProfile(response);
+         }
+       });
+     }
+
+     function buildProfile(user) {
+       let profile = `
+        <h3>${user.name}</h3>
+        <ul>
+          <li class="list-group-item">User ID : ${user.id}</li>
+          <li class="list-group-item">User ID : ${user.birthday}</li>
+          <li class="list-group-item">User ID : ${user.gender}</li>
+          <li class="list-group-item">User ID : ${user.email}</li>
+        </ul>
+       `;
      }
 
      function checkLoginState() {
         FB.getLoginStatus(function(response) {
           statusChangeCallback(response);
+        });
+      }
+
+      function setElements(isLoggedIn) {
+        console.log("If Block : "+isLoggedIn);
+        if(isLoggedIn) {
+          document.getElementById("logout").style.display = "block";
+          document.getElementById("profile").style.display = "block";
+          document.getElementById("fb-btn").style.display = "none";
+          document.getElementById("heading").style.display = "none";
+        } else {
+          console.log("Else Block : "+isLoggedIn);
+          document.getElementById("logout").style.display = "none";
+          document.getElementById("profile").style.display = "none";
+          document.getElementById("fb-btn").style.display = "block";
+          document.getElementById("heading").style.display = "none";
+        }
+      }
+
+      function fbLogout() {
+        FB.logout(function(response) {
+          setElements(false);
         });
       }
   </script>
@@ -80,6 +126,8 @@
   <h3 id="heading">Log In To View Your Profie</h3>
   <div id="profile"></div>
 </div>
+
+<li><a id="logout" href="#" onclick="logout()">Logout</a></li>
 
   <fb:login-button
     scope="public_profile,email"
